@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AFILIADOS UNITV FREE</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --text: #212529;
+      --card: #ffffff;
+      --primary: #0d6efd;
+      --border: #dee2e6;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --card: #1e1e1e;
+      --primary: #0d6efd;
+      --border: #333;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      transition: background-color 0.3s;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), #0a58ca);
+      color: white;
+      text-align: center;
+      padding: 1.8rem 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .logo {
+      width: 140px;
+      height: auto;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 20px auto;
+      padding: 0 16px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 16px;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      font-size: 1rem;
+      background: var(--card);
+      color: var(--text);
+    }
+
+    .theme-toggle {
+      padding: 12px 18px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .affiliate-item {
+      padding: 20px;
+    }
+
+    .rank {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+    }
+
+    .label {
+      font-weight: 500;
+      color: #666;
+      min-width: 100px;
+    }
+
+    [data-theme="dark"] .label {
+      color: #aaa;
+    }
+
+    .whatsapp {
+      color: #25D366;
+      font-weight: 500;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .indications {
+      color: var(--primary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    [data-theme="dark"] footer {
+      color: #888;
+    }
+  </style>
+</head>
+<body data-theme="light">
+
+  <header>
+    <img src="https://tivva.com.br/wp-content/uploads/2025/11/tv-logo-1-1.webp" 
+         alt="UniTV" class="logo">
+    <h1>AFILIADOS UNITV FREE</h1>
+    <p class="subtitle">Lista de Afiliados</p>
+  </header>
+
+  <div class="container">
+    <div class="controls">
+      <input type="text" id="search" class="search-box" placeholder="Buscar por nome ou WhatsApp...">
+      <button class="theme-toggle" id="themeToggle">🌙 Escuro</button>
+    </div>
+
+    <div id="listContainer"></div>
+  </div>
+
+  <footer>
+    AFILIADOS UNITV FREE © 2026
+  </footer>
+
+  <script>
+    // ==================== DADOS DOS AFILIADOS ====================
+    let afiliados = [
+      { 
+        nome: "Diego", 
+        whatsapp: "(21) 97275-8873", 
+        clientes: 0 
+      }
+      // Adicione mais afiliados aqui:
+      // { nome: "Ana Silva", whatsapp: "(11) 95555-4321", clientes: 12 },
+    ];
+
+    function ordenarAfiliados() {
+      afiliados.sort((a, b) => b.clientes - a.clientes);
+    }
+
+    function renderizarLista(filtro = "") {
+      ordenarAfiliados();
+      const container = document.getElementById("listContainer");
+      container.innerHTML = "";
+
+      const termo = filtro.toLowerCase().trim();
+
+      const filtrados = afiliados.filter(af => {
+        const nomeMatch = af.nome.toLowerCase().includes(termo);
+        const whatsMatch = af.whatsapp.toLowerCase().includes(termo);
+        return nomeMatch || whatsMatch;
+      });
+
+      if (filtrados.length === 0) {
+        container.innerHTML = `<div class="empty">Nenhum afiliado encontrado</div>`;
+        return;
+      }
+
+      filtrados.forEach((af, index) => {
+        const numeroLimpo = af.whatsapp.replace(/\D/g, '');
+        const linkWhats = `https://wa.me/55${numeroLimpo}`;
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="affiliate-item">
+            <div class="rank">${index + 1}º</div>
+            
+            <div class="name">${af.nome}</div>
+            
+            <div class="info-row">
+              <span class="label">WhatsApp</span>
+              <a href="${linkWhats}" target="_blank" class="whatsapp">
+                💬 ${af.whatsapp}
+              </a>
+            </div>
+            
+            <div class="info-row">
+              <span class="label">Indicações</span>
+              <span class="indications">
+                👥 ${af.clientes}
+              </span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ==================== TEMA ====================
+    function alternarTema() {
+      const body = document.documentElement;
+      const atual = body.getAttribute("data-theme") || "light";
+      const novo = atual === "dark" ? "light" : "dark";
+
+      body.setAttribute("data-theme", novo);
+      localStorage.setItem("tema", novo);
+
+      document.getElementById("themeToggle").textContent = 
+        novo === "dark" ? "☀️ Claro" : "🌙 Escuro";
+    }
+
+    function carregarTema() {
+      const temaSalvo = localStorage.getItem("tema") || "light";
+      document.documentElement.setAttribute("data-theme", temaSalvo);
+      document.getElementById("themeToggle").textContent = 
+        temaSalvo === "dark" ? "☀️ Claro" : "🌙 Escuro";
+    }
+
+    // ==================== EVENTOS ====================
+    document.getElementById("search").addEventListener("input", (e) => {
+      renderizarLista(e.target.value);
+    });
+
+    document.getElementById("themeToggle").addEventListener("click", alternarTema);
+
+    // Inicialização
+    window.onload = () => {
+      carregarTema();
+      renderizarLista();
+    };
+  </script>
+</body>
+</html>
